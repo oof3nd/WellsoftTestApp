@@ -1,0 +1,149 @@
+﻿@model WellsoftTestApp.Models.Employee
+
+@{
+    ViewData["Title"] = "Сотрудники";
+}
+
+<h1>Сотрудники</h1>
+
+<p>
+    <button type="button" class="btn btn-primary btn-sm" id="btnAddEmployee">Добавить сотрудника</button>
+</p>
+
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавление сотрудника</h5>
+            </div>
+            @using (Html.BeginForm("CreateEmployee", "Stocktaking", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Age, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Company, htmlAttributes: new { @class = "control-label col-md-2", })
+                            <div class="col-md-10">
+                                <select class="form-control" id="CompanyId" name="CompanyId" asp-for="CompanyId">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <input type="submit" class="btn btn-success" id="confirmAdd"  value="Добавить">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="employeeTitleModal">Изменение сотрудника</h5>
+            </div>
+            @using (Html.BeginForm("EditEmployee", "Stocktaking", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", @id = "NameEdit"} })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Description, new { htmlAttributes = new { @class = "form-control", @id = "DescriptionEdit" } })
+                                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Age, htmlAttributes: new { @class = "col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(m => m.Age, new { htmlAttributes = new { @class = "form-control", @id = "AgeEdit" } })
+                                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Company, htmlAttributes: new { @class = "col-md-2", })
+                            <div class="col-md-10">
+                                <select class="form-control" id="CompanyIdEdit" name="CompanyId" asp-for="CompanyId">
+                                </select>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.Id)
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <input type="submit" class="btn btn-primary" id="confirmEdit" value="Изменить">
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Age)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateAdd)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody id="tblData">
+    </tbody>
+</table>
+
+<div id="paged"></div>
+
+@section Scripts{
+
+    <script src="~/js/main.min.js"></script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
